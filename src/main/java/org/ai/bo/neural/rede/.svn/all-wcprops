@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/tcc/!svn/ver/120/trunk/Implementacao/RedesNeurais/src/br/edu/facear/tcc/bo/neural/rede
+END
+Sinapse.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/tcc/!svn/ver/107/trunk/Implementacao/RedesNeurais/src/br/edu/facear/tcc/bo/neural/rede/Sinapse.java
+END
+FuncaoAtivacao.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/tcc/!svn/ver/104/trunk/Implementacao/RedesNeurais/src/br/edu/facear/tcc/bo/neural/rede/FuncaoAtivacao.java
+END
+Camada.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/tcc/!svn/ver/107/trunk/Implementacao/RedesNeurais/src/br/edu/facear/tcc/bo/neural/rede/Camada.java
+END
+RedeNeural.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/tcc/!svn/ver/120/trunk/Implementacao/RedesNeurais/src/br/edu/facear/tcc/bo/neural/rede/RedeNeural.java
+END
+StatusRedeNeural.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/tcc/!svn/ver/104/trunk/Implementacao/RedesNeurais/src/br/edu/facear/tcc/bo/neural/rede/StatusRedeNeural.java
+END
+Neuronio.java
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/tcc/!svn/ver/107/trunk/Implementacao/RedesNeurais/src/br/edu/facear/tcc/bo/neural/rede/Neuronio.java
+END

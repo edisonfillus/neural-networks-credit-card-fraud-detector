@@ -1,0 +1,15 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package br.edu.facear.tcc.bo.neural.treino;
+
+/**
+ *
+ * @author Edison
+ */
+public enum TipoCriterioParada {
+    NUMERO_EPOCAS,
+    ERRO_ACEITAVEL;
+}

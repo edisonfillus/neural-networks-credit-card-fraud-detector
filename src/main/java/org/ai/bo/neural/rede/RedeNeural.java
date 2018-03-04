@@ -1,0 +1,509 @@
+package org.ai.bo.neural.rede;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.ai.bo.analise.Caso;
+import org.ai.bo.neural.*;
+import org.ai.bo.neural.treino.DadosTreinamento;
+import org.ai.bo.neural.treino.TipoFuncaoAtivacao;
+import org.ai.bo.neural.treino.TipoTreino;
+import org.ai.dao.factory.Db4oDAOFactory;
+
+/**
+ * Classe Rede Neural
+ * @author Edison Klafke Fillus
+ * @author Jefferson de Souza Campos
+ */
+public class RedeNeural implements Cloneable, Serializable {
+
+    private static final long serialVersionUID = 1L;
+    public static final int GLOBAL_CLIENTES = 1;
+
+    // <editor-fold defaultstate="collapsed" desc="Atributos">
+    private int id;
+    private String nome;
+    private DadosTreinamento dadosTreinamento;
+    private List<Camada> camadas;
+    private StatusRedeNeural status;
+    private boolean comBias;
+
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="Propriedades">
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int val) {
+        this.id = val;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public List<Camada> getCamadas() {
+        return camadas;
+    }
+
+    public void setCamadas(List<Camada> camadas) {
+        this.camadas = camadas;
+    }
+
+    public StatusRedeNeural getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusRedeNeural status) {
+        this.status = status;
+    }
+
+    public DadosTreinamento getDadosTreinamento() {
+        return dadosTreinamento;
+    }
+
+    public void setDadosTreinamento(DadosTreinamento dadosTreinamento) {
+        this.dadosTreinamento = dadosTreinamento;
+    }
+
+    public boolean isComBias() {
+        return comBias;
+    }
+
+    public void setComBias(boolean comBias) {
+        this.comBias = comBias;
+    }
+
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="Contrutores">
+    public RedeNeural() {
+        init();
+
+    }
+
+    public RedeNeural(List<Integer> arquitetura, boolean bias) {
+        init();
+        this.comBias = bias;
+        CriarArquitetura(arquitetura, bias);
+    }
+
+    private void init() {
+        id = 0;
+        dadosTreinamento = new DadosTreinamento();
+        dadosTreinamento.setTaxaAprendizado(0.5D);
+        this.status = StatusRedeNeural.INICIADA;
+    }
+
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="Métodos">
+    /**
+     * Método para pulsar todas os neurônios de todas as camadas, exceto entrada, da Rede Neural
+     */
+    public void Pulsar() {
+        for (int i = 1; i < camadas.size(); i++) {
+            Camada camada = camadas.get(i);
+            camada.Pulsar(dadosTreinamento.getTipoFuncaoAtivacao());
+        }
+    }
+
+    /**
+     * Método para aplicar o aprendizado em todos os neurônios de todas as camadas, exceto entrada, da Rede Neural
+     */
+    public void AplicarAprendizado() {
+        for (int i = 1; i < camadas.size(); i++) {
+            Camada camada = camadas.get(i);
+            camada.AplicarAprendizado();
+        }
+    }
+
+    /**
+     * Método para reiniciar o aprendizado de todos os neurônios de todas as camadas, exceto entrada, da Rede Neural<br>
+     * Este método tambem reinicia o Erro Quadrático Médio. <br>
+     * Executar este método a cada época.
+     */
+    public void ReiniciarAprendizado() {
+        for (int i = 1; i < camadas.size(); i++) {
+            Camada camada = camadas.get(i);
+            camada.ReiniciarAprendizado();
+        }
+        // reinicia o valor do Erro Quadrático Médio a cada nova época.
+        // Uma época consiste no intervalo correspondente a apresentação
+        // de todos os N vetores-exemplo do conjunto de treino a camada de entrada.
+        dadosTreinamento.setErroQuadraticoMedio(0);
+    }
+
+    /**
+     * Método para Criar a Arquitetura da Rede
+     * @param arquitetura
+     * @param bias
+     */
+    public void CriarArquitetura(List<Integer> arquitetura, boolean bias) {
+        this.comBias = bias;
+        //Cria as Camadas.
+        camadas = new ArrayList<Camada>();
+        //Cria os neuronios da camada de Entrada. Eles não possuem bias
+        camadas.add(0, new Camada(arquitetura.get(0), false));
+
+        //Cria os neurônios das camadas seguinte
+        for (int i = 1; i < arquitetura.size(); i++) { //Para Cada Camada
+            camadas.add(i, new Camada(arquitetura.get(i), bias)); //Cria a camada com ou sem bias
+        }
+
+        //Conecta as camadas
+        for (int i = 1; i < camadas.size(); i++) { //Para cada Camada
+            for (Neuronio neuronioCamadaSeguinte : camadas.get(i).getNeuronios()) { //Para cada neuronio da camada seguinte
+                for (Neuronio neuronioCamadaAnterior : camadas.get(i - 1).getNeuronios()) { //Para cada neuronio da camada anterior
+                    neuronioCamadaSeguinte.getSinapses().add(new Sinapse(Math.random(), neuronioCamadaAnterior));
+                }
+            }
+        }
+        this.status = StatusRedeNeural.ARQUITETURA_CRIADA;
+    }
+
+    public void PreparaCamadaEntradaParaPulsar(Caso caso) {
+        int i;
+        // Verifica se o numero de entrada é igual ao numero de neuronios de entrada
+        if (caso.getEntradas().size() != camadas.get(0).getNeuronios().size()) {
+            throw new IllegalArgumentException(String.format("Era espedado {0} entradas para esta rede", camadas.get(0).getNeuronios().size()));
+        // Seta os dados de entrada na camada de entrada
+        }
+        for (i = 0; i < caso.getEntradas().size(); i++) {
+            camadas.get(0).getNeuronios().get(i).setSaida(caso.getEntradas().get(i));
+        }
+    }
+
+    /**
+     * Calcula os Erros: <br>
+     * <ul>
+     * <li>Sinal de Erro </li> <br>
+     * <li>Erro Local </li> <br>
+     * <li>Erro Quadrático </li>
+     * </ul>
+     * @param caso
+     * @param teste
+     */
+    public void CalculaErros(Caso caso, boolean teste) {
+        //Calcula o erro local da camada de saída e o erro quadrático médio
+        for (int i = 0; i < camadas.get(camadas.size() - 1).getNeuronios().size(); i++) {
+            Neuronio neuronioSaida = camadas.get(camadas.size() - 1).getNeuronios().get(i); //Recupera o neuronio de Saida
+
+            //Sinal de Erro = Resultado Desejado - Saida do Neurônio
+            neuronioSaida.setSinalErro(caso.getSaidasEsperadas().get(i) - neuronioSaida.getSaida());
+
+            //O Sinal de Erro deve passar por um Gradiente Local
+            //Erro Local da Camada de Saida = Sinal de Erro * Função de Ativação Sigmoide Derivada
+            neuronioSaida.setErroLocal(neuronioSaida.getSinalErro() * new FuncaoAtivacao(TipoFuncaoAtivacao.SigmoideDerivada).Executar(neuronioSaida.getSaida()));
+
+            //Erro Quadrático do Neuronio de Saida = 1/2 * (Sinal de Erro Neuronio Saida ^ 2) 
+            neuronioSaida.setErroQuadratico(Math.pow(neuronioSaida.getSinalErro(), 2) / 2);
+
+            //Acumula as somas de cada neuronio de saida, para todos os casos, e no final divide pelo numero de casos
+            if(teste){
+                dadosTreinamento.setErroQuadraticoMedioTestes(dadosTreinamento.getErroQuadraticoMedioTestes() + neuronioSaida.getErroQuadratico());
+            } else {
+                dadosTreinamento.setErroQuadraticoMedio(dadosTreinamento.getErroQuadraticoMedio() + neuronioSaida.getErroQuadratico());
+            }
+
+
+        }
+
+
+        //Calcula o gradiente local das camadas ocultas
+        for (int z = camadas.size() - 2; z >= 1; z--) { //Para cada camada oculta, da ultima até a primeira
+
+            for (int i = 0; i < camadas.get(z).getNeuronios().size(); i++) {
+                Neuronio neuronioAtual = camadas.get(z).getNeuronios().get(i);
+                double somaErrosXPesos = 0;
+                for (Neuronio neuronioCamadaAnterior : camadas.get(z + 1).getNeuronios()) {
+                    //ErroCamadaOculta = Soma(erro*peso das unidades da camada anterior conectadas ao neuronio) * Sigmoide Derivada 
+                    somaErrosXPesos += (neuronioCamadaAnterior.getErroLocal() * neuronioCamadaAnterior.getSinapseEntrada(neuronioAtual).getPeso());
+                }
+                //Gradiente Local = Soma dos erros * pesos das unidades da camada anterior * Sigmoide Derivada
+                double gradienteLocal = somaErrosXPesos * new FuncaoAtivacao(TipoFuncaoAtivacao.SigmoideDerivada).Executar(neuronioAtual.getSaida());
+                neuronioAtual.setErroLocal(gradienteLocal);
+            }
+        }
+    }
+
+    public void CalculaAjusteDosPesos() {
+        double regraDeltaGeneralizada = 0;
+        double constanteMomentum = 0.01; //TODO: Verificar implantação da constante de Momentum
+
+        for (int i = camadas.size() - 1; i > 0; i--) { //Da camada de saida até a primeira camada oculta
+
+            for (Neuronio neuronioAtual : camadas.get(i).getNeuronios()) {
+
+                for (Neuronio neuronioCamadaAnterior : camadas.get(i - 1).getNeuronios()) {
+                    //TODO: Pesquisar Referência > Regra Delta Generalizada = (Peso da conexao * taxa de momentum) + erro local do neuronio * saida do neuronio anterior * taxa de aprendizado
+
+                    regraDeltaGeneralizada = neuronioAtual.getSinapseEntrada(neuronioCamadaAnterior).getPeso() * constanteMomentum + neuronioAtual.getErroLocal() * neuronioCamadaAnterior.getSaida() * dadosTreinamento.getTaxaAprendizagemAtual();
+                    neuronioAtual.getSinapseEntrada(neuronioCamadaAnterior).setDelta(neuronioAtual.getSinapseEntrada(neuronioCamadaAnterior).getDelta() + regraDeltaGeneralizada);
+                }
+                if (neuronioAtual.getBias() != null) { //Se tiver bias
+                    regraDeltaGeneralizada = neuronioAtual.getBias().getPeso() * constanteMomentum + neuronioAtual.getErroLocal() * neuronioAtual.getBias().getPeso() * dadosTreinamento.getTaxaAprendizagemAtual();
+                    neuronioAtual.getBias().setDelta(neuronioAtual.getBias().getDelta() + regraDeltaGeneralizada);
+                }
+            }
+        }
+    }
+
+    /**
+     * Método para fazer uma sessão de treino <br>
+     * Referência do Algoritmo BackPropagation: <br>
+     * <a href=http://www.lncc.br/~labinfo/tutorialRN/frm4_backpropagation.htm>
+     * http://www.lncc.br/~labinfo/tutorialRN/frm4_backpropagation.htm</a>
+     */
+    public void TreinoEpoca() {
+
+        ReiniciarAprendizado(); // seta todos os deltas para zero
+
+        for (Caso casoTreinoAtual : dadosTreinamento.getListCasosTreinamento()) {
+            PreparaCamadaEntradaParaPulsar(casoTreinoAtual);
+            Pulsar();
+            CalculaErros(casoTreinoAtual,false);
+            CalculaAjusteDosPesos();
+            casoTreinoAtual.setSaidasRede(getSaidas());
+        }
+        //ErroQuadráticoMédio = Soma(ErroQuadráticoNeuronioSaida) / NumeroCasosTreinamento
+
+        dadosTreinamento.setErroQuadraticoMedio(dadosTreinamento.getErroQuadraticoMedio() / dadosTreinamento.getListCasosTreinamento().size());
+
+        AplicarAprendizado(); //Aplica a correção de erro
+        dadosTreinamento.setEpocas(dadosTreinamento.getEpocas() + 1);
+
+
+    }
+
+    public void Treino(TipoTreino tipoTreino) {
+
+        dadosTreinamento.setEpocas(0);
+        switch (tipoTreino) {
+            case BackPropagation:
+                do { //Executa o treino até que o erro quadrático médio atinja o valor aceitável                        
+                    System.out.println(">> Efetuando o Treino... Época: " + dadosTreinamento.getEpocas());
+                    dadosTreinamento.setEpocas(dadosTreinamento.getEpocas() + 1);
+                    ReiniciarAprendizado(); // seta todos os deltas para zero
+
+                    for (Caso casoTreinoAtual : dadosTreinamento.getListCasosTreinamento()) {
+                        PreparaCamadaEntradaParaPulsar(casoTreinoAtual);
+                        Pulsar();
+                        CalculaErros(casoTreinoAtual,false);
+                        CalculaAjusteDosPesos();
+                    }
+
+                    AplicarAprendizado(); //Aplica a correção de erro
+
+                    //ErroQuadráticoMédio = Soma(ErroQuadráticoNeuronioSaida) / NumeroCasosTreinamento
+                    dadosTreinamento.setErroQuadraticoMedio(dadosTreinamento.getErroQuadraticoMedio() / dadosTreinamento.getListCasosTreinamento().size());
+
+                // System.out.println(erroQuadraticoMedio + "     " + taxaAprendizado);
+
+                } while (dadosTreinamento.getErroQuadraticoMedio() > dadosTreinamento.getErroAceitavel());
+                break;
+            default:
+                break;
+
+
+        }
+
+    }
+
+    /**
+     * Metodo para fazer uma sessão de testes
+     */
+    public void TesteEpoca() {
+        for (Caso casoTesteAtual : dadosTreinamento.getListCasosTeste()) {
+            PreparaCamadaEntradaParaPulsar(casoTesteAtual);
+            Pulsar();
+            CalculaErros(casoTesteAtual,true);
+            casoTesteAtual.setSaidasRede(getSaidas());
+        }
+        dadosTreinamento.setErroQuadraticoMedioTestes(dadosTreinamento.getErroQuadraticoMedioTestes() / dadosTreinamento.getListCasosTeste().size());
+    }
+
+    /**
+     * Método para capturar as saidas da rede
+     * @return
+     */
+    public List<Double> getSaidas() {
+        int numSaidas = getCamadas().get(getCamadas().size() - 1).getNeuronios().size();
+        List<Double> saidas = new ArrayList<Double>(numSaidas);
+        for (int i = 0; i < numSaidas; i++) {
+            saidas.add(getCamadas().get(getCamadas().size() - 1).getNeuronios().get(i).getSaida());
+        }
+        return saidas;
+    }
+
+
+    public int getCountCamadas() {
+        return camadas.size();
+    }
+
+    public int getCountNeuronios() {
+        int qtd = 0;
+        for (Camada camada : camadas) {
+            qtd += camada.getNeuronios().size();
+        }
+        return qtd;
+    }
+
+    public int getCountSinapses() {
+        int qtd = 0;
+        for (Camada camada : camadas) {
+            for (Neuronio neuronio : camada.getNeuronios()) {
+                qtd += neuronio.getSinapses().size();
+            }
+        }
+        return qtd;
+    }
+
+    public List<Integer> getArquitetura() {
+        List<Integer> arquitetura = new ArrayList<Integer>(camadas.size());
+        for (int i = 0; i < camadas.size(); i++) {
+            arquitetura.add(i, camadas.get(i).getNeuronios().size());
+        }
+        return arquitetura;
+    }
+
+    public Neuronio getNeuronioByIndex(int index) {
+        int num = 0;
+        for (int i = 0; i < camadas.size(); i++) {
+            for (int j = 0; j < camadas.get(i).getNeuronios().size(); j++) {
+                if (num == index) {
+                    return camadas.get(i).getNeuronios().get(j);
+                }
+                num++;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return nome;
+    }
+
+    @Override
+    public RedeNeural clone() {
+        ObjectOutputStream oos = null;
+        RedeNeural novaRede = null;
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream(100);
+            oos = new ObjectOutputStream(baos);
+            oos.writeObject(this);
+            byte[] buf = baos.toByteArray();
+            oos.close();
+            // deserializa
+            ByteArrayInputStream bais = new ByteArrayInputStream(buf);
+            ObjectInputStream ois = new ObjectInputStream(bais);
+            novaRede = (RedeNeural) ois.readObject();
+            ois.close();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(RedeNeural.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(RedeNeural.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                oos.close();
+            } catch (IOException ex) {
+                Logger.getLogger(RedeNeural.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return novaRede;
+    }
+
+    /**
+     * Transfere o conhecimento desta rede para a rede passada pelo parâmetro
+     * @param clone
+     */
+    public void transfereConhecimento(RedeNeural clone) {
+        clone.CriarArquitetura(this.getArquitetura(), this.comBias);
+        clone.setStatus(this.getStatus());
+        dadosTreinamento.transfereInformacoes(clone.dadosTreinamento);
+        for (int i = 0; i < camadas.size(); i++) {
+            Camada camada = camadas.get(i);
+            Camada camadaClone = clone.getCamadas().get(i);
+            for (int j = 0; j < camada.getNeuronios().size(); j++) {
+                Neuronio neuronio = camada.getNeuronios().get(j);
+                Neuronio neuronioClone = camadaClone.getNeuronios().get(j);
+                if (neuronio.getBias() != null) {
+                    neuronioClone.getBias().setPeso(neuronio.getBias().getPeso());
+                }
+                for (int k = 0; k < neuronio.getSinapses().size(); k++) {
+                    Sinapse sinapse = neuronio.getSinapses().get(k);
+                    Sinapse sinapseClone = neuronioClone.getSinapses().get(k);
+                    sinapseClone.setPeso(sinapse.getPeso());
+                }
+            }
+        }
+
+    }
+
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="Métodos Persistência">
+    /**
+     * Método para criar o objeto no local de persistência
+     * @return <code>true</code> Se executado com sucesso
+     */
+    public boolean create() {
+        return Db4oDAOFactory.getRedeNeuralDAO().createRedeNeural(this);
+    }
+
+    /**
+     * Método para atualizar o objeto no local de persistência
+     * @return
+     */
+    public boolean update() {
+        return Db4oDAOFactory.getRedeNeuralDAO().updateRedeNeural(this);
+    }
+
+    /**
+     * Método para excluir o objeto no local de persistência
+     * @return
+     */
+    public boolean delete() {
+        return Db4oDAOFactory.getRedeNeuralDAO().deleteRedeNeural(this);
+    }
+
+    /**
+     * Método para localizar um objeto RedeNeural no local de persitência
+     * @param id
+     * @return RedeNeural
+     */
+    public static RedeNeural find(int id) {
+        return Db4oDAOFactory.getRedeNeuralDAO().findRedeNeural(id);
+    }
+
+    /**
+     * Método para obter uma lista de RedeNeural do local de persistência
+     * @return
+     */
+    public static List<RedeNeural> findAll() {
+        return Db4oDAOFactory.getRedeNeuralDAO().listRedeNeural();
+    }
+
+    /**
+     * Método para obter a quantidade de RedeNeural do local de persistência
+     * @return
+     */
+    public static int count() {
+        return Db4oDAOFactory.getRedeNeuralDAO().getRedeNeuralCount();
+    }    // </editor-fold>
+}
+

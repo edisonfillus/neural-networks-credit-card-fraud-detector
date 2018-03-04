@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/tcc/!svn/ver/120/trunk/Implementacao/RedesNeurais/src/br/edu/facear/tcc/bo/neural/treino
+END
+TipoFuncaoAtivacao.java
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/tcc/!svn/ver/104/trunk/Implementacao/RedesNeurais/src/br/edu/facear/tcc/bo/neural/treino/TipoFuncaoAtivacao.java
+END
+DadosTreinamento.java
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/tcc/!svn/ver/120/trunk/Implementacao/RedesNeurais/src/br/edu/facear/tcc/bo/neural/treino/DadosTreinamento.java
+END
+TipoTaxaAprendizagem.java
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/tcc/!svn/ver/119/trunk/Implementacao/RedesNeurais/src/br/edu/facear/tcc/bo/neural/treino/TipoTaxaAprendizagem.java
+END
+EstatisticaTreinamento.java
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/tcc/!svn/ver/107/trunk/Implementacao/RedesNeurais/src/br/edu/facear/tcc/bo/neural/treino/EstatisticaTreinamento.java
+END
+TipoCriterioParada.java
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/tcc/!svn/ver/119/trunk/Implementacao/RedesNeurais/src/br/edu/facear/tcc/bo/neural/treino/TipoCriterioParada.java
+END
+TipoTreino.java
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/tcc/!svn/ver/104/trunk/Implementacao/RedesNeurais/src/br/edu/facear/tcc/bo/neural/treino/TipoTreino.java
+END
+TaxaAprendizadoAdaptativa.java
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/svn/tcc/!svn/ver/107/trunk/Implementacao/RedesNeurais/src/br/edu/facear/tcc/bo/neural/treino/TaxaAprendizadoAdaptativa.java
+END
