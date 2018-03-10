@@ -298,7 +298,6 @@ public class GeradorTransacoes {
     }
 
     public static void main(String[] args) {
-        org.apache.log4j.PropertyConfigurator.configure(GeradorTransacoes.class.getClassLoader().getResource("br/edu/facear/tcc/log/log4j.properties"));
         GeradorTransacoes ger = new GeradorTransacoes(Cliente.findAll().get(0));
         ger.carregaListaProbabilisticaTerminais();
 

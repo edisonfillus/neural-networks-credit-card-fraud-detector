@@ -38,7 +38,6 @@ public class PostgreSqlClienteDAO extends PostgreSqlDAOFactory implements Client
      * @param cliente Cliente
      * @return <code>true</code> Se executado com sucesso
      */
-    @Override
     public boolean createCliente(Cliente cliente) {
         boolean created = false;
         EntityManager em = super.getJPAEntityManager(); //Recupera o EntityManager

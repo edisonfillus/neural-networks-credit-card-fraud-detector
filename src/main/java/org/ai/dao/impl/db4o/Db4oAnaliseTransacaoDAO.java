@@ -38,7 +38,6 @@ public class Db4oAnaliseTransacaoDAO extends Db4oDAOFactory implements AnaliseTr
      * @param analiseTransacao AnaliseTransacao
      * @return <code>true</code> Se executado com sucesso
      */
-    @Override
     public boolean createAnaliseTransacao(AnaliseTransacao analiseTransacao) {
         boolean created = false;
         ObjectContainer connection = super.getConnection(); //Recupera o ObjectContainer
@@ -65,7 +64,6 @@ public class Db4oAnaliseTransacaoDAO extends Db4oDAOFactory implements AnaliseTr
      * @param analiseTransacao AnaliseTransacao
      * @return <code>true</code> Se executado com sucesso
      */
-    @Override
     public boolean updateAnaliseTransacao(AnaliseTransacao analiseTransacao) {
         boolean updated = false;
         ObjectContainer connection = super.getConnection();//Recupera o ObjectContainer
@@ -92,7 +90,6 @@ public class Db4oAnaliseTransacaoDAO extends Db4oDAOFactory implements AnaliseTr
      * Método para Excluir um objeto AnaliseTransacao
      * @return <code>true</code> Se executado com sucesso
      */
-    @Override
     public boolean deleteAnaliseTransacao(AnaliseTransacao analiseTransacao) {
         boolean deleted = false;
         ObjectContainer connection = super.getConnection(); //Recupera o ObjectContainer
@@ -120,7 +117,6 @@ public class Db4oAnaliseTransacaoDAO extends Db4oDAOFactory implements AnaliseTr
      * @param id
      * @return AnaliseTransacao
      */
-    @Override
     public AnaliseTransacao findAnaliseTransacao(final int id) {
         AnaliseTransacao rede = new AnaliseTransacao();
         ObjectContainer connection = super.getConnection(); //Recupera o ObjectContainer
@@ -143,7 +139,6 @@ public class Db4oAnaliseTransacaoDAO extends Db4oDAOFactory implements AnaliseTr
      * Método para obter uma lista de objetos AnaliseTransacao
      * @return
      */
-    @Override
     public List<AnaliseTransacao> listAnaliseTransacao() {
         ObjectContainer connection = super.getConnection(); //Recupera o ObjectContainer
         List<AnaliseTransacao> resultSet = connection.query(AnaliseTransacao.class);
@@ -163,7 +158,6 @@ public class Db4oAnaliseTransacaoDAO extends Db4oDAOFactory implements AnaliseTr
      * Método para obter a contagem de objetos AnaliseTransacao
      * @return
      */
-    @Override
     public int getAnaliseTransacaoCount() {
         int count = 0;
         ObjectContainer connection = super.getConnection(); //Recupera o ObjectContainer

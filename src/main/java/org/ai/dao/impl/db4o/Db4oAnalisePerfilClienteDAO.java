@@ -39,7 +39,6 @@ public class Db4oAnalisePerfilClienteDAO extends Db4oDAOFactory implements Anali
      * @param analisePerfilCliente AnalisePerfilCliente
      * @return <code>true</code> Se executado com sucesso
      */
-    @Override
     public boolean createAnalisePerfilCliente(AnalisePerfilCliente analisePerfilCliente) {
         boolean created = false;
         ObjectContainer connection = super.getConnection(); //Recupera o ObjectContainer
@@ -66,7 +65,6 @@ public class Db4oAnalisePerfilClienteDAO extends Db4oDAOFactory implements Anali
      * @param analisePerfilCliente AnalisePerfilCliente
      * @return <code>true</code> Se executado com sucesso
      */
-    @Override
     public boolean updateAnalisePerfilCliente(AnalisePerfilCliente analisePerfilCliente) {
         boolean updated = false;
         ObjectContainer connection = super.getConnection();//Recupera o ObjectContainer
@@ -93,7 +91,6 @@ public class Db4oAnalisePerfilClienteDAO extends Db4oDAOFactory implements Anali
      * Método para Excluir um objeto AnalisePerfilCliente
      * @return <code>true</code> Se executado com sucesso
      */
-    @Override
     public boolean deleteAnalisePerfilCliente(AnalisePerfilCliente analisePerfilCliente) {
         boolean deleted = false;
         ObjectContainer connection = super.getConnection(); //Recupera o ObjectContainer
@@ -121,7 +118,6 @@ public class Db4oAnalisePerfilClienteDAO extends Db4oDAOFactory implements Anali
      * @param id
      * @return AnalisePerfilCliente
      */
-    @Override
     public AnalisePerfilCliente findAnalisePerfilCliente(final int id) {
         AnalisePerfilCliente rede = new AnalisePerfilCliente();
         ObjectContainer connection = super.getConnection(); //Recupera o ObjectContainer
@@ -144,7 +140,6 @@ public class Db4oAnalisePerfilClienteDAO extends Db4oDAOFactory implements Anali
      * Método para obter uma lista de objetos AnalisePerfilCliente
      * @return
      */
-    @Override
     public List<AnalisePerfilCliente> listAnalisePerfilCliente() {
         ObjectContainer connection = super.getConnection(); //Recupera o ObjectContainer
         List<AnalisePerfilCliente> resultSet = connection.query(AnalisePerfilCliente.class);
@@ -164,7 +159,6 @@ public class Db4oAnalisePerfilClienteDAO extends Db4oDAOFactory implements Anali
      * Método para obter a contagem de objetos AnalisePerfilCliente
      * @return
      */
-    @Override
     public int getAnalisePerfilClienteCount() {
         int count = 0;
         ObjectContainer connection = super.getConnection(); //Recupera o ObjectContainer

@@ -1,19 +1,16 @@
 package org.ai.console;
 
-import java.util.Calendar;
-import java.util.List;
-import org.apache.log4j.Logger;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import org.ai.bo.ambiente.Estado;
-import org.ai.bo.neural.rede.RedeNeural;
 import org.ai.dao.factory.Db4oDAOFactory;
-import org.ai.dao.factory.HsqldbDAOFactory;
 import org.ai.forms.FormMenuPrincipal;
-import org.apache.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jvnet.substance.skin.SubstanceOfficeSilver2007LookAndFeel;
+
 
 /**
  *  @author Edison
@@ -25,11 +22,8 @@ public class Main {
      */
     public static void main(String args[]) {
 
-        //Carrega a configuração do LOG4J
-        org.apache.log4j.PropertyConfigurator.configure(Main.class.getClassLoader().getResource("org/ai/log/log4j.properties"));
-
-
-
+    	Logger logger = LogManager.getLogger(Main.class);
+    			
         Db4oDAOFactory.setKeepAliveConnection(true);
 
         Estado.count();
@@ -41,12 +35,11 @@ public class Main {
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); //Seta o Look and Feel do windows
             } catch (Exception ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.WARN, "Não foi possivel Aplicar Skin", ex);
+                logger.log(org.apache.logging.log4j.Level.WARN, "Não foi possivel Aplicar Skin", ex);
             }
         }
 
         SwingUtilities.invokeLater(new Runnable() {
-            @Override
             public void run() {
                 FormMenuPrincipal form = new FormMenuPrincipal();
                 form.setExtendedState(FormMenuPrincipal.MAXIMIZED_BOTH);
@@ -54,7 +47,7 @@ public class Main {
             }
         });    
     
-    // <editor-fold defaultstate="collapsed" desc="Teste Persistencia Cliente e Cartões">
+    // <editor-fold defaultstate="collapsed" desc="Teste Persistencia Cliente e CartÃµes">
         /*
     Cliente cli = new Cliente();
     cli.setNome("Jefferson");

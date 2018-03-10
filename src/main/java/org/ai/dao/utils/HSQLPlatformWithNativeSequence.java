@@ -22,12 +22,10 @@ public class HSQLPlatformWithNativeSequence extends HSQLPlatform {
         return true;
     }
 
-    @Override
     public boolean shouldNativeSequenceAcquireValueAfterInsert() {
         return true;
     }
 
-    @Override
     public ValueReadQuery buildSelectQueryForNativeSequence() {
         return new ValueReadQuery("CALL IDENTITY()");
     }

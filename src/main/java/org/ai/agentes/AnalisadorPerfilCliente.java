@@ -97,7 +97,6 @@ public class AnalisadorPerfilCliente implements Runnable {
         
     // <editor-fold defaultstate="collapsed" desc="Métodos">
     
-    @Override
     public void run() {
         notifyAnaliseInicializada();
         totalClientes = clientes.size();

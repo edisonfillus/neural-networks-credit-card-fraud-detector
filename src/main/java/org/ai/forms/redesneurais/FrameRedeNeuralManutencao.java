@@ -28,8 +28,9 @@ import org.ai.forms.redesneurais.grafico.DadosGraficoTreinamento;
 import org.ai.forms.redesneurais.grafico.FrameRedeNeuralGraficoAprendizagem;
 import org.ai.forms.redesneurais.rn3d.FrameRedeNeuralArquitetura3D;
 import org.ai.forms.utils.ColumnResizer;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
@@ -1301,7 +1302,7 @@ private void btnTreinarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
             rede.getDadosTreinamento().setTipoCriterioParada(TipoCriterioParada.ERRO_ACEITAVEL);
             rede.getDadosTreinamento().setErroAceitavel(formatter.parse(txtErroAceitavel.getText()).doubleValue());
         } catch (ParseException ex) {
-            Logger.getLogger(FrameRedeNeuralManutencao.class.getName()).log(Level.ERROR, null, ex);
+        	LogManager.getLogger(FrameRedeNeuralManutencao.class.getName()).log(Level.ERROR,  ex);
         }
     } else {
         rede.getDadosTreinamento().setTipoCriterioParada(TipoCriterioParada.NUMERO_EPOCAS);
@@ -1317,7 +1318,7 @@ private void btnTreinarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
                 taxa.setTaxaAprendizado(formatter.parse(modelTaxaAdaptativa.getValueAt(i, 1).toString()).doubleValue());
                 rede.getDadosTreinamento().getTaxaAprendizagemAdaptativa().add(taxa);
             } catch (ParseException ex) {
-                Logger.getLogger(FrameRedeNeuralManutencao.class.getName()).log(Level.ERROR, null, ex);
+                LogManager.getLogger(FrameRedeNeuralManutencao.class.getName()).log(Level.ERROR, ex);
             }
         }
     } else if (btnTaxaGerenciada.isSelected()) {
@@ -1326,14 +1327,14 @@ private void btnTreinarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
             rede.getDadosTreinamento().setTaxaAprendizado(formatter.parse(txtTaxaAprendizadoInicial.getText()).doubleValue());
             rede.getDadosTreinamento().setTaxaAprendizadoMaxima(formatter.parse(txtTaxaAprendizagemMaxima.getText()).doubleValue());
         } catch (ParseException ex) {
-            Logger.getLogger(FrameRedeNeuralManutencao.class.getName()).log(Level.ERROR, null, ex);
+        	LogManager.getLogger(FrameRedeNeuralManutencao.class.getName()).log(Level.ERROR, ex);
         }
     } else {
         rede.getDadosTreinamento().setTipoTaxaAprendizagem(TipoTaxaAprendizagem.FIXA);
         try {
             rede.getDadosTreinamento().setTaxaAprendizado(formatter.parse(txtTaxaAprendizagem.getText()).doubleValue());
         } catch (ParseException ex) {
-            Logger.getLogger(FrameRedeNeuralManutencao.class.getName()).log(Level.ERROR, null, ex);
+            LogManager.getLogger(FrameRedeNeuralManutencao.class.getName()).log(Level.ERROR,  ex);
         }
     }
 
@@ -1364,7 +1365,6 @@ private void btnTreinarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
             //Implementado com invokeLater para liberar a thread treinamento
             SwingUtilities.invokeLater(new Runnable() {
 
-                @Override
                 public void run() {
 
                     btnPararTreinamento.setVisible(false);

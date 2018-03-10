@@ -3,12 +3,25 @@ package org.ai.dao.factory;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import org.ai.dao.impl.hsqldb.*;
-import org.ai.dao.interfaces.*;
+import org.ai.dao.impl.hsqldb.HsqldbAlertaDAO;
+import org.ai.dao.impl.hsqldb.HsqldbAnalistaDAO;
+import org.ai.dao.impl.hsqldb.HsqldbBancoDAO;
+import org.ai.dao.impl.hsqldb.HsqldbCartaoDAO;
+import org.ai.dao.impl.hsqldb.HsqldbCidadeDAO;
+import org.ai.dao.impl.hsqldb.HsqldbClienteDAO;
+import org.ai.dao.impl.hsqldb.HsqldbEstabelecimentoDAO;
+import org.ai.dao.impl.hsqldb.HsqldbEstadoDAO;
+import org.ai.dao.impl.hsqldb.HsqldbItemDAO;
+import org.ai.dao.impl.hsqldb.HsqldbRamoAtividadeDAO;
+import org.ai.dao.impl.hsqldb.HsqldbRegiaoDAO;
+import org.ai.dao.impl.hsqldb.HsqldbRespostaDAO;
+import org.ai.dao.impl.hsqldb.HsqldbTerminalPOSDAO;
+import org.ai.dao.impl.hsqldb.HsqldbTransacaoDAO;
 import org.ai.dao.interfaces.ambiente.AlertaDAO;
 import org.ai.dao.interfaces.ambiente.AnalistaDAO;
 import org.ai.dao.interfaces.ambiente.BancoDAO;
@@ -23,7 +36,8 @@ import org.ai.dao.interfaces.ambiente.RegiaoDAO;
 import org.ai.dao.interfaces.ambiente.RespostaDAO;
 import org.ai.dao.interfaces.ambiente.TerminalPOSDAO;
 import org.ai.dao.interfaces.ambiente.TransacaoDAO;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class HsqldbDAOFactory {
 
@@ -43,7 +57,7 @@ public class HsqldbDAOFactory {
     private static EntityManager entityManager = null;  
     private static boolean keepAliveJDBCConnection = false; //Flag Manter Conexão JDBC Ativa
     private static boolean keepAliveJPAEntityManager = false; //Flag Manter Entity Manager JPA Ativo
-    protected static Logger logger = Logger.getLogger("daoLogger"); //Log do DAO
+    protected static Logger logger = LogManager.getLogger("daoLogger"); //Log do DAO
     private static EntityManagerFactory emf = null;//Cache para Manager JPA
     
     // </editor-fold>

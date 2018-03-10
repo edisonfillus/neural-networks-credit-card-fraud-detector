@@ -38,7 +38,6 @@ public class HsqldbTerminalPOSDAO extends HsqldbDAOFactory implements TerminalPO
      * @param terminalPOS TerminalPOS
      * @return <code>true</code> Se executado com sucesso
      */
-    @Override
     public boolean createTerminalPOS(TerminalPOS terminalPOS) {
         boolean created = false;
         EntityManager em = super.getJPAEntityManager(); //Recupera o EntityManager

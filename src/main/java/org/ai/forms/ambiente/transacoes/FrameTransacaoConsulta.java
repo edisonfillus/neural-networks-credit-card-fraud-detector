@@ -9,7 +9,6 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.List;
 import javax.swing.DefaultCellEditor;
-import javax.swing.DefaultCellEditor;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
@@ -307,7 +306,6 @@ private void btnAnalisarTodasActionPerformed(java.awt.event.ActionEvent evt) {//
 
             SwingUtilities.invokeLater(new Runnable() {
 
-                @Override
                 public void run() {
                     updateTableTransacoes();
                     JOptionPane.showMessageDialog(frame, "Analise Finalizada");

@@ -39,7 +39,6 @@ public class Db4oRedeNeuralDAO extends Db4oDAOFactory implements RedeNeuralDAO {
      * @param redeNeural RedeNeural
      * @return <code>true</code> Se executado com sucesso
      */
-    @Override
     public boolean createRedeNeural(RedeNeural redeNeural) {
         boolean created = false;
         ObjectContainer connection = super.getConnection(); //Recupera o ObjectContainer
@@ -66,7 +65,6 @@ public class Db4oRedeNeuralDAO extends Db4oDAOFactory implements RedeNeuralDAO {
      * @param redeNeural RedeNeural
      * @return <code>true</code> Se executado com sucesso
      */
-    @Override
     public boolean updateRedeNeural(RedeNeural redeNeural) {
         boolean updated = false;
         ObjectContainer connection = super.getConnection();//Recupera o ObjectContainer
@@ -95,7 +93,6 @@ public class Db4oRedeNeuralDAO extends Db4oDAOFactory implements RedeNeuralDAO {
      * Método para Excluir um objeto RedeNeural
      * @return <code>true</code> Se executado com sucesso
      */
-    @Override
     public boolean deleteRedeNeural(RedeNeural redeNeural) {
         boolean deleted = false;
         ObjectContainer connection = super.getConnection(); //Recupera o ObjectContainer
@@ -123,7 +120,6 @@ public class Db4oRedeNeuralDAO extends Db4oDAOFactory implements RedeNeuralDAO {
      * @param id
      * @return RedeNeural
      */
-    @Override
     public RedeNeural findRedeNeural(final int id) {
         RedeNeural rede = new RedeNeural();
         ObjectContainer connection = super.getConnection(); //Recupera o ObjectContainer
@@ -147,7 +143,6 @@ public class Db4oRedeNeuralDAO extends Db4oDAOFactory implements RedeNeuralDAO {
      * Método para obter uma lista de objetos RedeNeural
      * @return
      */
-    @Override
     public List<RedeNeural> listRedeNeural() {
         ObjectContainer connection = super.getConnection(); //Recupera o ObjectContainer
         List<RedeNeural> resultSet = connection.query(RedeNeural.class);
@@ -168,7 +163,6 @@ public class Db4oRedeNeuralDAO extends Db4oDAOFactory implements RedeNeuralDAO {
      * Método para obter a contagem de objetos RedeNeural
      * @return
      */
-    @Override
     public int getRedeNeuralCount() {
         int count = 0;
         ObjectContainer connection = super.getConnection(); //Recupera o ObjectContainer

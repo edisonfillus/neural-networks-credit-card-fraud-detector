@@ -99,7 +99,6 @@ public class AnalisadorTransacao implements Runnable {
         
     // <editor-fold defaultstate="collapsed" desc="Métodos">
     
-    @Override
     public void run() {
         notifyAnaliseInicializada();
         totalTransacoes = transacoes.size();

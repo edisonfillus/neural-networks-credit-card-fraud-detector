@@ -377,7 +377,6 @@ private void btnAnalisarClientesActionPerformed(java.awt.event.ActionEvent evt) 
 
             SwingUtilities.invokeLater(new Runnable() {
 
-                @Override
                 public void run() {
                     JOptionPane.showMessageDialog(frame, "Analise Finalizada");
                 }

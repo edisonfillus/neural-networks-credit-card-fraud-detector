@@ -2,13 +2,16 @@ package org.ai.dao.factory;
 
 import com.db4o.*;
 
+
 import org.ai.dao.impl.db4o.Db4oAnalisePerfilClienteDAO;
 import org.ai.dao.impl.db4o.Db4oAnaliseTransacaoDAO;
 import org.ai.dao.impl.db4o.Db4oRedeNeuralDAO;
 import org.ai.dao.interfaces.analise.AnalisePerfilClienteDAO;
 import org.ai.dao.interfaces.analise.AnaliseTransacaoDAO;
 import org.ai.dao.interfaces.neural.RedeNeuralDAO;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 public class Db4oDAOFactory {
 
@@ -26,8 +29,7 @@ public class Db4oDAOFactory {
     
     private static ObjectContainer connection;
     private static boolean keepAliveConnection = false;
-    protected static Logger logger = Logger.getLogger("daoLogger"); //Log do DAO
-    
+    protected static Logger logger = LogManager.getLogger("daoLogger"); //Log do DAO
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Métodos Connection">

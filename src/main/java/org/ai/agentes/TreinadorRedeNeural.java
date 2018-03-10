@@ -15,7 +15,8 @@ import org.ai.bo.neural.rede.Sinapse;
 import org.ai.bo.neural.rede.StatusRedeNeural;
 import org.ai.bo.neural.treino.TipoCriterioParada;
 import org.ai.bo.neural.treino.TipoTaxaAprendizagem;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Classe Agente Treinador de Rede Neural
@@ -27,7 +28,7 @@ public class TreinadorRedeNeural implements Runnable {
 
     // <editor-fold defaultstate="collapsed" desc="Atributos">
     private RedeNeural rede;
-    private Logger logger = Logger.getLogger("treinadorLogger"); //Log do TreinadorRedeNeural
+    private Logger logger = LogManager.getLogger("treinadorLogger"); //Log do TreinadorRedeNeural
     private boolean stopTreinamento;
 
     // </editor-fold>
@@ -270,7 +271,6 @@ public class TreinadorRedeNeural implements Runnable {
     /**
      * Método para iniciar o TreinadorRedeNeural
      */
-    @Override
     public void run() {
         notifyTreinamentoInicializado();
         ExecutaTreino();

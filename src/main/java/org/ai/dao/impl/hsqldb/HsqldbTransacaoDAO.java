@@ -42,7 +42,6 @@ public class HsqldbTransacaoDAO extends HsqldbDAOFactory implements TransacaoDAO
      * @param transacao Transacao
      * @return <code>true</code> Se executado com sucesso
      */
-    @Override
     public boolean createTransacao(Transacao transacao) {
         boolean created = false;
         EntityManager em = super.getJPAEntityManager(); //Recupera o EntityManager

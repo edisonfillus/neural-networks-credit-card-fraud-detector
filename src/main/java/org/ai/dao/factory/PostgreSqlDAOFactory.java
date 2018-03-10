@@ -3,12 +3,26 @@ package org.ai.dao.factory;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import org.ai.dao.impl.postgresql.*;
-import org.ai.dao.interfaces.*;
+import org.ai.dao.impl.postgresql.PostgreSqlAlertaDAO;
+import org.ai.dao.impl.postgresql.PostgreSqlAnalistaDAO;
+import org.ai.dao.impl.postgresql.PostgreSqlBancoDAO;
+import org.ai.dao.impl.postgresql.PostgreSqlCartaoDAO;
+import org.ai.dao.impl.postgresql.PostgreSqlCasoDAO;
+import org.ai.dao.impl.postgresql.PostgreSqlCidadeDAO;
+import org.ai.dao.impl.postgresql.PostgreSqlClienteDAO;
+import org.ai.dao.impl.postgresql.PostgreSqlEstabelecimentoDAO;
+import org.ai.dao.impl.postgresql.PostgreSqlEstadoDAO;
+import org.ai.dao.impl.postgresql.PostgreSqlItemDAO;
+import org.ai.dao.impl.postgresql.PostgreSqlRamoAtividadeDAO;
+import org.ai.dao.impl.postgresql.PostgreSqlRegiaoDAO;
+import org.ai.dao.impl.postgresql.PostgreSqlRespostaDAO;
+import org.ai.dao.impl.postgresql.PostgreSqlTerminalPOSDAO;
+import org.ai.dao.impl.postgresql.PostgreSqlTransacaoDAO;
 import org.ai.dao.interfaces.ambiente.AlertaDAO;
 import org.ai.dao.interfaces.ambiente.AnalistaDAO;
 import org.ai.dao.interfaces.ambiente.BancoDAO;
@@ -24,7 +38,8 @@ import org.ai.dao.interfaces.ambiente.RespostaDAO;
 import org.ai.dao.interfaces.ambiente.TerminalPOSDAO;
 import org.ai.dao.interfaces.ambiente.TransacaoDAO;
 import org.ai.dao.interfaces.analise.CasoDAO;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class PostgreSqlDAOFactory {
 
@@ -44,7 +59,7 @@ public class PostgreSqlDAOFactory {
     private static EntityManager entityManager = null;  //Cache para Manager JPA
     private static boolean keepAliveJDBCConnection = false; //Flag Manter Conexão JDBC Ativa
     private static boolean keepAliveJPAEntityManager = false; //Flag Manter Entity Manager JPA Ativo
-    protected static Logger logger = Logger.getLogger("daoLogger"); //Log do DAO
+    protected static Logger logger = LogManager.getLogger("daoLogger"); //Log do DAO
     
     // </editor-fold>
 

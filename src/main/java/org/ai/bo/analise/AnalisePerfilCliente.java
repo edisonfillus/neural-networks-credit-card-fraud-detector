@@ -17,8 +17,6 @@ import org.ai.bo.ambiente.StatusTransacao;
 import org.ai.bo.ambiente.Transacao;
 import org.ai.dao.factory.Db4oDAOFactory;
 
-import oracle.toplink.essentials.internal.queryframework.MapContainerPolicy;
-
 /**
  *
  * @author Edison
